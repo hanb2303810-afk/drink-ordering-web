@@ -101,6 +101,7 @@ mvn verify    # chạy toàn bộ test + JaCoCo, báo lỗi nếu coverage dư�
 
 Giữ nguyên Feature Branch Workflow của nhóm: `feature/`, `fix/`, `docs/`…
 commit `feat(<scope>): <mô tả>`, PR + review, không commit thẳng `main`.
+Mỗi PR tự chạy CI (mục 13): server `mvn verify` + client build phải xanh.
 
 ## 8. Khác biệt so với kịch bản console gốc
 
@@ -109,3 +110,72 @@ commit `feat(<scope>): <mô tả>`, PR + review, không commit thẳng `main`.
 - Barista xử lý **tự động** từ `OrderQueue` (đúng domain), không có endpoint
   "claim đơn" như bản kế hoạch — trang barista chỉ quan sát realtime.
 - Số barista mặc định 2 (cấu hình `app.baristas` trong `application.yml`).
+
+## 9. Cài đặt môi trường cho thành viên (làm 1 lần)
+
+| Cài | Phiên bản | Dùng cho |
+|---|---|---|
+| Git | bản mới nhất | clone, branch, PR |
+| JDK 21 (Temurin) | **21** — tránh JDK 25 để khớp JaCoCo 0.8.11/0.8.14 nhóm | build + chạy server |
+| IntelliJ IDEA Community | bản mới | mở `server/` (Maven tích hợp sẵn, không cần cài Maven) |
+| Node.js LTS | ≥ 20 | client (npm kèm theo Node) |
+
+**Không cần cài database** — toàn bộ món/đơn/tài khoản là in-memory, seed lúc khởi động.
+
+## 10. Chạy lần đầu (onboarding mỗi người)
+
+```bash
+git clone https://github.com/hanb2303810-afk/drink-ordering-web.git
+cd drink-ordering-web
+
+# Terminal 1 — server (8080), dùng IDE mở file server/pom.xml chạy
+# DrinkOrderingApplication, hoặc dùng lệnh:
+cd server
+mvn spring-boot:run
+
+# Terminal 2 — client (5173, tự proxy /api về 8080)
+cd client
+npm install
+npm run dev
+```
+
+**Kiểm tra thành công:** mở http://localhost:5173 thấy menu tiếng Việt → chọn món,
+nhập tên, "Đặt nước" → đơn hiện ngay trong bảng "Theo dõi pha chế" → ~2 giây sau
+thành "Hoàn thành". Mở http://localhost:5173/barista để xem quầy barista.
+
+**Hỗ trợ server bằng IDE:** IntelliJ các thao tác Maven chỉ cần mở panel Maven →
+Lifecycle → `verify` để chạy test + kiểm coverage thay cho `mvn verify`.
+
+## 11. Sử dụng — các vai trò trong demo
+
+| Vai trò | Đăng nhập | Làm gì trên web |
+|---|---|---|
+| Khách vãng lai | không cần | "Bảng món" đặt nước, theo dõi đơn realtime |
+| Nhân viên phục vụ | `phucvu1/pass123` | đặt nước hộ khách, theo dõi toàn đơn |
+| Barista | `barista1/pass123` | `/barista` — quầy pha chế, thấy đơn chảy qua PENDING → PREPARING → COMPLETED |
+| Quản trị | `admin/admin123` | `/admin` — CRUD menu, gán vai trò, lịch sử đơn, thống kê bán chạy |
+
+Demo điểm chính của đề tài (đa luồng): mở **2 tab barista** (barista1 + barista2),
+đặt 4–6 đơn liên tục → thấy nhiều barista nhận đơn song song, `orderId` không trùng.
+
+## 12. Bản đồ vùng code — ai sửa đâu
+
+| Vùng | File | Nguyên tắc |
+|---|---|---|
+| **DOMAIN** (chính là phần bài nộp console) | `server/src/main/java/com/group04/{Drink,Order,OrderQueue,Barista,...}.java` | **hạn chế sửa**; cần đổi phải báo cả nhóm vì đồng bộ với repo console |
+| API + SSE + auth | `server/.../controller/`, `auth/`, `realtime/`, `store/`, `dto/` | vùng tính năng web mới — thoải mái mở branch riêng |
+| Trang khách / barista | `client/src/pages/MenuPage.tsx`, `BaristaPage.tsx`, `App.tsx` | |
+| Trang quản trị | `server/.../controller/AdminController.java`, `client/src/pages/AdminPage.tsx` | |
+| Giao diện/tokens | `client/src/index.css` | đổi màu/chi tiết chung cẩn thận đụng nhiều trang |
+
+Trước khi tạo PR luôn phải xanh cả hai: `mvn verify` (server) và `npm run build` (client).
+
+## 13. CI tự động (GitHub Actions)
+
+Workflow `.github/workflows/ci.yml` chạy 2 job song song cho mỗi PR/commit vào `main`:
+
+- **server**: JDK 21 (Temurin) + cache Maven → `mvn verify` (test toàn bộ + chặn coverage ≥ 80%/75%)
+- **client**: Node 20 + cache npm → `npm ci && npm run build`
+
+PR đỏ trên checks: sửa đến khi xanh rồi mới xin review — reviewer chỉ nhìn dấu check.
+
