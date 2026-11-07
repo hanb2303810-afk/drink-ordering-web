@@ -1,0 +1,19 @@
+# Hiện thực in-memory nên không cần DB; cấu hình giữ tối giản.
+server:
+  port: 8080
+
+app:
+  # JWT nhẹ tự viết bằng HMAC-SHA256; giữ trong file này cho demo, thật tế thì đưa ra biến môi trường.
+  jwt:
+    secret: "group04-demo-secret-please-change-in-production"
+    expiration-ms: 28800000
+  # Số barista chạy song song (mỗi barista là 1 thread trên OrderQueue của domain).
+  baristas: 2
+  # Spring Security sản xuất demo dùng chung tài khoản seed; đổi qua biến môi trường khi chạy thật.
+  auth:
+    admin-user: admin
+    admin-password: admin123
+
+logging:
+  level:
+    com.group04: INFO
