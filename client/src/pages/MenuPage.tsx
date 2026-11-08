@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { createOrder, listDrinks, subscribeOrders } from '../api'
 import type { DrinkDto, OrderDto, OrderStatus } from '../types'
 
@@ -43,6 +44,8 @@ export default function MenuPage() {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [askName, setAskName] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     let cancelled = false
@@ -96,7 +99,8 @@ export default function MenuPage() {
         return
       }
       if (!customerName.trim()) {
-        setError('Vui lòng nhập tên để phục vụ gọi món')
+        // Hộp thoại 2 lựa chọn thay cho dòng lỗi: quay lại nhập, hoặc đi đăng nhập tài khoản quán
+        setAskName(true)
         return
       }
       const order = await createOrder(customerName.trim(), items)
@@ -220,6 +224,37 @@ export default function MenuPage() {
           </section>
         </div>
       </div>
+
+      {askName && (
+        <div className="dialog-backdrop" onClick={() => setAskName(false)}>
+          <div
+            className="dialog card"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Thiếu tên khách"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="dialog-msg">
+              Vui lòng nhập tên để phục vụ gọi món. Bạn muốn quay lại nhập tên,
+              hay đi tới form đăng nhập?
+            </p>
+            <div className="dialog-actions">
+              <button className="btn ghost" onClick={() => setAskName(false)}>
+                Quay lại
+              </button>
+              <button
+                className="btn primary"
+                onClick={() => {
+                  setAskName(false)
+                  navigate('/login')
+                }}
+              >
+                Đến form đăng nhập
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
