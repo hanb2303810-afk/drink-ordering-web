@@ -188,38 +188,38 @@ export default function MenuPage() {
           </button>
           {message && <p className="ok">{message}</p>}
           {error && <p className="error">{error}</p>}
+
+          <section className="tracking">
+            <h2>Theo dõi pha chế</h2>
+            <div className="panel">
+              {pending.length === 0 ? (
+                <p className="muted">Chưa có đơn nào đang xử lý. Hãy là khách đầu tiên!</p>
+              ) : (
+                <div className="orders-line">
+                  {pending.map((order) => (
+                    <div
+                      className={`order-chip ${order.status.toLowerCase()}`}
+                      key={order.orderId}
+                    >
+                      <div className="order-id">#{order.orderId} · {order.customerName}</div>
+                      <div className="order-items">
+                        {order.items.map((item) => (
+                          <span key={item.drinkId}>
+                            {item.quantity}× {item.drinkName}
+                          </span>
+                        ))}
+                      </div>
+                      <div className={`status status-${order.status.toLowerCase()}`}>
+                        {STATUS_LABEL[order.status]}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
         </div>
       </div>
-
-      <section className="tracking">
-        <h2>Theo dõi pha chế</h2>
-        <div className="panel">
-          {pending.length === 0 ? (
-            <p className="muted">Chưa có đơn nào đang xử lý. Hãy là khách đầu tiên!</p>
-          ) : (
-            <div className="orders-line">
-              {pending.map((order) => (
-                <div
-                  className={`order-chip ${order.status.toLowerCase()}`}
-                  key={order.orderId}
-                >
-                  <div className="order-id">#{order.orderId} · {order.customerName}</div>
-                  <div className="order-items">
-                    {order.items.map((item) => (
-                      <span key={item.drinkId}>
-                        {item.quantity}× {item.drinkName}
-                      </span>
-                    ))}
-                  </div>
-                  <div className={`status status-${order.status.toLowerCase()}`}>
-                    {STATUS_LABEL[order.status]}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
     </div>
   )
 }
