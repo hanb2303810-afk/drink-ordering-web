@@ -179,3 +179,18 @@ Workflow `.github/workflows/ci.yml` chạy 2 job song song cho mỗi PR/commit v
 
 PR đỏ trên checks: sửa đến khi xanh rồi mới xin review — reviewer chỉ nhìn dấu check.
 
+## 14. Nguồn ảnh món (credit)
+
+Ảnh món trên "Bảng món" tìm qua **Openverse API** (`https://api.openverse.org/v1/images/`, không cần key) theo đúng từ khóa tên từng món, nguồn Flickr, giấy phép **CC BY / CC BY-SA / CC0** — đã xem ảnh thật trước khi chọn:
+
+| Món | Từ khóa tìm | Giấy phép |
+|---|---|---|
+| Cà phê sữa đá (CF01) | `vietnamese iced coffee` — phin đổ lên ly sữa đặc | CC BY |
+| Bạc xỉu (CF02) | `latte coffee milk glass` | CC BY-SA |
+| Espresso (CF03) | `espresso shot cup` | CC BY |
+| Trà sữa trân châu (MT01) | `bubble tea milk` | CC BY-SA |
+| Trà sữa matcha (MT02) | `matcha latte` | CC BY-SA |
+| Trà sữa caramel (MT03) | `caramel macchiato iced` | CC BY-SA |
+
+Ảnh fallback cho món admin tự thêm lấy từ **Unsplash** (URL công khai). Khi thay ảnh: sửa `IMAGE_BY_ID` trong `client/src/pages/MenuPage.tsx` và **cập nhật lại bảng credit này** để giữ attribution hợp lệ.
+

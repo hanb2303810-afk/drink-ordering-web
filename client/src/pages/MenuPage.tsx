@@ -9,17 +9,17 @@ const STATUS_LABEL: Record<OrderStatus, string> = {
 }
 
 /**
- * Ảnh món lấy từ Unsplash (URL công khai, không cần key).
- * Chưa có ảnh riêng theo id món mới do admin thêm thì fallback theo loại:
- * iced/bạc xỉu kiểu latte, còn lại ảnh cà phê nóng / trà sữa chung.
+ * Ảnh món tìm qua Openverse API (nguồn Flickr, giấy phép CC BY / CC BY-SA / CC0 —
+ * ghi credit ở README). Chưa có ảnh riêng theo id món mới do admin thêm thì
+ * fallback theo loại: cà phê nóng / trà sữa chung (Unsplash).
  */
 const IMAGE_BY_ID: Record<string, string> = {
-  CF01: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&auto=format&fit=crop',
-  CF02: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80&auto=format&fit=crop',
-  CF03: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80&auto=format&fit=crop',
-  MT01: 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&auto=format&fit=crop',
-  MT02: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80&auto=format&fit=crop',
-  MT03: 'https://images.unsplash.com/photo-1552960562-daf630e9278b?w=600&q=80&auto=format&fit=crop',
+  CF01: 'https://live.staticflickr.com/5519/9576222945_376f6a4ebf_b.jpg', // cà phê sữa đá: phin + sữa đặc
+  CF02: 'https://live.staticflickr.com/2246/2427469950_9ebe827665_b.jpg', // bạc xỉu: ly latte nhiều sữa
+  CF03: 'https://live.staticflickr.com/4042/5076909942_1ef4fbbcac_b.jpg', // espresso: cốc nhỏ đen
+  MT01: 'https://live.staticflickr.com/2653/4000461186_aa159096b3_b.jpg', // trà sữa trân châu
+  MT02: 'https://live.staticflickr.com/3231/3122544172_0acaccaa0f_b.jpg', // trà sữa matcha
+  MT03: 'https://live.staticflickr.com/7499/15401252794_97454dff92_b.jpg', // trà sữa caramel
 }
 
 const FALLBACK_IMAGE = {
