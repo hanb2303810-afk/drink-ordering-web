@@ -1,4 +1,4 @@
-# Drink Ordering Web — CT240 Nhóm 04 (web hóa đề tài)
+# Drink Ordering Web — CT240 Nhóm 04 
 
 **Học phần:** Nguyên lý xây dựng phần mềm (CT240) · **Nguồn:** web hóa đề tài console
 [Hệ thống quản lý và đặt nước tại quán](https://github.com/duyb2405024/CT240T-2026-Group04-Project)
