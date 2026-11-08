@@ -176,6 +176,17 @@ body {
   font-size: 1rem;
 }
 
+/* Ảnh của món: phủ mép trên thẻ, lệch viền padding của .card chút cho đẹp */
+.drink-img {
+  display: block;
+  width: calc(100% + 2rem);
+  margin: -1rem -1rem 0.75rem;
+  height: 8.5rem;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: #f3e8dc;
+}
+
 .price {
   font-weight: 700;
   color: var(--accent-dark);

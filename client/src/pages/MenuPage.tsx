@@ -9,6 +9,29 @@ const STATUS_LABEL: Record<OrderStatus, string> = {
 }
 
 /**
+ * Ảnh món lấy từ Unsplash (URL công khai, không cần key).
+ * Chưa có ảnh riêng theo id món mới do admin thêm thì fallback theo loại:
+ * iced/bạc xỉu kiểu latte, còn lại ảnh cà phê nóng / trà sữa chung.
+ */
+const IMAGE_BY_ID: Record<string, string> = {
+  CF01: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&auto=format&fit=crop',
+  CF02: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80&auto=format&fit=crop',
+  CF03: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80&auto=format&fit=crop',
+  MT01: 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80&auto=format&fit=crop',
+  MT02: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80&auto=format&fit=crop',
+  MT03: 'https://images.unsplash.com/photo-1552960562-daf630e9278b?w=600&q=80&auto=format&fit=crop',
+}
+
+const FALLBACK_IMAGE = {
+  COFFEE: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&q=80&auto=format&fit=crop',
+  MILK_TEA: 'https://images.unsplash.com/photo-1546039907-7fa05f864c02?w=600&q=80&auto=format&fit=crop',
+}
+
+function drinkImage(drink: DrinkDto): string {
+  return IMAGE_BY_ID[drink.id] ?? FALLBACK_IMAGE[drink.type]
+}
+
+/**
  * Trang chính dành cho khách: chọn món, đặt nước, theo dõi đơn realtime qua SSE.
  * Sự kiện "orders" do server phát mỗi khi thread Barista đổi trạng thái đơn.
  */
@@ -98,6 +121,13 @@ export default function MenuPage() {
           <div className="grid">
             {drinks.map((drink) => (
               <div className="card drink" key={drink.id}>
+                <img
+                  className="drink-img"
+                  src={drinkImage(drink)}
+                  alt={drink.name}
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
+                />
                 <div className="drink-head">
                   <h3>{drink.name}</h3>
                   <span className="tag">{drink.type === 'COFFEE' ? 'Cà phê' : 'Trà sữa'}</span>
@@ -162,7 +192,7 @@ export default function MenuPage() {
       </div>
 
       <section className="tracking">
-        <h2>Theo dõi pha chế <span className="muted small">(realtime qua SSE)</span></h2>
+        <h2>Theo dõi pha chế</h2>
         <div className="panel">
           {pending.length === 0 ? (
             <p className="muted">Chưa có đơn nào đang xử lý. Hãy là khách đầu tiên!</p>

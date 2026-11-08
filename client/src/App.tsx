@@ -45,7 +45,7 @@ function Header() {
 
   return (
     <header className="topbar">
-      <Link to="/" className="brand">☕ Quán 04 — Đặt nước realtime</Link>
+      <Link to="/" className="brand">☕ Quán Zero-Four — Đặt nước realtime</Link>
       <nav>
         <Link to="/">Bảng món</Link>
         <Link to="/track">Theo dõi đơn</Link>
@@ -62,7 +62,7 @@ function Header() {
           </>
         ) : (
           <Link className="btn" to="/login">
-            Nhân viên đăng nhập
+            Đăng nhập
           </Link>
         )}
       </div>
