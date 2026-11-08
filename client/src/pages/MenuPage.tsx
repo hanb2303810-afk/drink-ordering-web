@@ -249,7 +249,7 @@ export default function MenuPage() {
                   navigate('/login')
                 }}
               >
-                Đến form đăng nhập
+                Đăng nhập
               </button>
             </div>
           </div>
