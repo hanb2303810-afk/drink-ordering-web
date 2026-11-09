@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import MenuPage from './pages/MenuPage'
 import BaristaPage from './pages/BaristaPage'
 import AdminPage from './pages/AdminPage'
+import TrackPage from './pages/TrackPage'
 import type { LoginResponse } from './types'
 
 /**
@@ -78,7 +79,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<MenuPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/track" element={<TrackRedirect />} />
+          <Route path="/track" element={<TrackPage />} />
           <Route
             path="/barista"
             element={
@@ -99,9 +100,4 @@ export default function App() {
       </main>
     </BrowserRouter>
   )
-}
-
-/** /track không có nội dung riêng: dẫn về trang chủ nơi có bảng theo dõi realtime. */
-function TrackRedirect() {
-  return <Navigate to="/" replace />
 }
